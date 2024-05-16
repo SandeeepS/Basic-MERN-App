@@ -1,37 +1,42 @@
-import { apiSlice } from './apiSlice';
-const USERS_URL = '/api/users';
-console.log("UUUU",USERS_URL)
+import { apiSlice } from "./apiSlice";
+const USERS_URL = "/api/users";
+console.log("UUUU", USERS_URL);
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/auth`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
     }),
     register: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
     }),
-    logout:builder.mutation({
-      query:() => ({
-        url:`${USERS_URL}/logout`,
-        method:'POST'
-      })
+    logout: builder.mutation({
+      query: () => ({
+        url: `${USERS_URL}/logout`,
+        method: "POST",
+      }),
     }),
     updateUser: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/profile`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
       }),
     }),
   }),
 });
 
-export const { useLoginMutation,useLogoutMutation,useRegisterMutation,useUpdateUserMutation } = userApiSlice;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useRegisterMutation,
+  useUpdateUserMutation,
+} = userApiSlice;

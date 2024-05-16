@@ -3,26 +3,27 @@ import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { useLogoutMutation } from "../slices/usersApiSlice";
-import {useNavigate} from 'react-router-dom';
-import {logout} from '../slices/authSlice'
+import { useNavigate } from "react-router-dom";
+import { logout } from "../slices/authSlice";
 
 const Header = () => {
   const userInfo = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [logoutApiCall] = useLogoutMutation();
 
   console.log(userInfo);
 
   const logoutHandler = async () => {
-    try{
-         await logoutApiCall().unwrap()
-         dispatch(logout());
-         navigate('/')
-    }catch(err){
-         console.log(err);
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      console.log("going to logout");
+      navigate("");
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
 
   return (
     <header>
@@ -40,7 +41,9 @@ const Header = () => {
                     <LinkContainer to="/profile">
                       <NavDropdown.Item>Profile</NavDropdown.Item>
                     </LinkContainer>
-                    <NavDropdown.Item onClick={logoutHandler} >Logout</NavDropdown.Item>
+                    <NavDropdown.Item onClick={logoutHandler}>
+                      Logout
+                    </NavDropdown.Item>
                   </NavDropdown>
                 </>
               ) : (
