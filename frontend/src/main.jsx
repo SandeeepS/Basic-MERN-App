@@ -18,7 +18,9 @@ import RegisterScreen from "./screens/RegisterScreen.jsx";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
 import UpdateProfile from "./screens/UpdateProfile.jsx";
 import Home from "./components/Home.jsx";
-
+import AdminLogin from "./screens/AdminLogin.jsx";
+import AdminProfile from "./screens/AdminProfile.jsx";
+import AddUserAdmin from "./screens/AddUserAdmin.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -26,11 +28,15 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
 
+      <Route path="/admin" element={<AdminLogin/>}/>
+
       {/* Pirvate Route */}
       <Route path="" element={<PrivateRoute />}>
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/updateProfile" element={<UpdateProfile />} />
+        <Route path="/adminProfile" element={<AdminProfile/>} />
+        <Route path="/addUser" element={<AddUserAdmin />} /> 
       </Route>
     </Route>
   )

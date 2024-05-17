@@ -1,37 +1,38 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { Form, Button} from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 import { useDispatch, useSelector } from "react-redux";
-import { useLoginMutation } from "../slices/usersApiSlice";
-import { setCredentials } from "../slices/userAuthSlice";
+import { useAdminLoginMutation } from "../slices/usersApiSlice";
+import { setAdminCredentials } from "../slices/adminAuthSlice";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 import Header from "../components/Header";
 
-const LoginScreen = () => {
+const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading }] = useAdminLoginMutation();
 
-  const { userInfo } = useSelector((state) => state.userAuth);
+  const { adminInfo } = useSelector((state) => state.adminAuth);
 
   useEffect(() => {
-    if (userInfo) {
-      navigate("/home");
+    if (adminInfo) {
+      navigate("/adminProfile");
     }
-  }, [navigate, userInfo]);
+  }, [navigate, adminInfo]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
-      navigate("/home");
+      console.log("admin details ",res)
+      dispatch(setAdminCredentials({ ...res }));
+      navigate("/adminProfile");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -41,7 +42,7 @@ const LoginScreen = () => {
     <>
     <Header/>
     <FormContainer>
-      <h1>Sign In</h1>
+      <h1>Admin Sign In</h1>
 
       <Form onSubmit={submitHandler}>
         <Form.Group className="my-2" controlId="email">
@@ -77,18 +78,9 @@ const LoginScreen = () => {
       </Form>
 
       {isLoading && <p>Loading...</p>}
-
-      <Row className="py-3">
-        <Col>
-          New Customer? <Link to="/register">Register</Link>
-        </Col>
-        <Col>
-          Home Page <Link to="/">Click Here</Link>
-        </Col>
-      </Row>
     </FormContainer>
     </>
   );
 };
 
-export default LoginScreen;
+export default AdminLogin;

@@ -5,13 +5,13 @@ import FormContainer from "../components/FormContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
-import { useRegisterMutation } from "../slices/usersApiSlice";
+import { useResgisterUserFromAdminMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/userAuthSlice";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { Card } from "react-bootstrap";
 
-const RegisterScreen = () => {
+const AddUserAdmin = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +21,7 @@ const RegisterScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [register, { isLoading }] = useRegisterMutation();
+  const [register, { isLoading }] = useResgisterUserFromAdminMutation();
   const { userInfo } = useSelector((state) => state.userAuth);
 
   useEffect(() => {
@@ -66,7 +66,8 @@ const RegisterScreen = () => {
     try {
       const res = await register({ name, email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
-      navigate("/");
+      toast("user added successfull");
+      navigate("/adminProfile");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -82,7 +83,7 @@ const RegisterScreen = () => {
     <>
       <Header />
       <FormContainer>
-        <h1>Register</h1>
+        <h1>Add a User</h1>
 
         <Card style={{ width: "18rem" }}>
           <Card.Img
@@ -167,4 +168,4 @@ const RegisterScreen = () => {
   );
 };
 
-export default RegisterScreen;
+export default AddUserAdmin;

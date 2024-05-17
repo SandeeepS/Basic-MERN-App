@@ -5,21 +5,26 @@ import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
-import { setCredentials } from "../slices/authSlice";
+import { setCredentials } from "../slices/userAuthSlice";
 import { useUpdateUserMutation } from "../slices/usersApiSlice";
 import Card from "react-bootstrap/Card";
 import mastang from "../assets/mastang-2.webp";
 import "../screens/profileScreen.css";
+import Header from "../components/Header";
+import { useNavigate } from "react-router-dom";
 
 const ProfileScreen = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null); // State for selected file
+
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.userAuth);
 
   const [updateProfile, { isLoading }] = useUpdateUserMutation();
 
@@ -68,6 +73,8 @@ const ProfileScreen = () => {
       console.log(res);
       dispatch(setCredentials({ ...res }));
       toast.success("Profile updated successfully");
+      navigate('/profile');
+
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -85,18 +92,24 @@ const ProfileScreen = () => {
   //   setProfileImage(file);
   // };
 
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+    // Optionally, show a preview of the selected image
+    // This requires setting up a URL.createObjectURL() call and displaying it in an img element
+  };
+
   return (
+    <>
+    <Header />
     <FormContainer>
       <h1>Update Profile 2</h1>
 
       <Card style={{ width: "18rem" }}>
-        <Card.Img variant="top" src={mastang} />
-        <Card.Body>
-          {/* <Card.Title>Card Title</Card.Title> */}
-
-          <Button variant="danger">Delete</Button>
-          <Button variant="primary">Edit</Button>
-        </Card.Body>
+      <Card.Img variant="top" src={selectedFile? URL.createObjectURL(selectedFile) : mastang} />
+          <Card.Body>
+            <Button variant="danger">Delete</Button>
+            <Button variant="primary">Edit</Button>
+          </Card.Body>
       </Card>
 
       <Form onSubmit={submitHandler}>
@@ -118,6 +131,14 @@ const ProfileScreen = () => {
             onChange={(e) => setEmail(e.target.value)}
           ></Form.Control>
         </Form.Group>
+
+        <Form.Group className="my-2" controlId="profileImage">
+            <Form.Label>Profile Picture</Form.Label>
+            <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} id="profileImageInput" />
+            <label htmlFor="profileImageInput">Select Image</label>
+        </Form.Group>
+
+
         <Form.Group className="my-2" controlId="password">
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -145,6 +166,7 @@ const ProfileScreen = () => {
         {isLoading && <Loader />}
       </Form>
     </FormContainer>
+    </>
   );
 };
 

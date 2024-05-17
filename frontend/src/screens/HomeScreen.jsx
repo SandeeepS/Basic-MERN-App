@@ -6,7 +6,7 @@ import { useEffect } from "react";
 const HomeScreen = () => {
   console.log("entered home screnn");
   const navigate = useNavigate();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.userAuth);
   useEffect(() => {
     if (userInfo) {
       console.log("entered in useeffect");

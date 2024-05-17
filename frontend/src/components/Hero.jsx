@@ -1,8 +1,11 @@
 import { Container, Card, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import Header from "./Header";
 
 const Hero = () => {
   return (
+    <>
+    <Header/>
     <div className=" py-5">
       <Container className="d-flex justify-content-center">
         <Card className="p-5 d-flex flex-column align-items-center hero-card bg-light w-75">
@@ -25,6 +28,7 @@ const Hero = () => {
         </Card>
       </Container>
     </div>
+    </>
   );
 };
 

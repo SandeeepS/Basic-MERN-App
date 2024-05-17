@@ -2,24 +2,23 @@ import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
-import { useLogoutMutation } from "../slices/usersApiSlice";
+import { useAdminLogoutMutation } from "../slices/usersApiSlice";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../slices/userAuthSlice";
+import { adlogout } from "../slices/adminAuthSlice";
 
-const Header = () => {
-  const userInfo = useSelector((state) => state.userAuth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [logoutApiCall] = useLogoutMutation();
-
-  console.log(userInfo);
+const AdminHeader = () => {
+    const  adminInfo  = useSelector((state) => state.adminAuth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [logoutApiCall] = useAdminLogoutMutation();
+    console.log(adminInfo);
 
   const logoutHandler = async () => {
     try {
       await logoutApiCall().unwrap();
-      dispatch(logout());
+      dispatch(adlogout());
       console.log("going to logout");
-      navigate("/");
+      navigate("/admin");
     } catch (err) {
       console.log(err);
     }
@@ -35,12 +34,10 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              {userInfo.userInfo ? (
+              {adminInfo.adminInfo ? (
                 <>
-                  <NavDropdown title={userInfo.userInfo.name} id="username">
-                    <LinkContainer to="/profile">
-                      <NavDropdown.Item>Profile</NavDropdown.Item>
-                    </LinkContainer>
+                  <NavDropdown title={adminInfo.adminInfo.name} id="username">
+                 
                     <NavDropdown.Item onClick={logoutHandler}>
                       Logout
                     </NavDropdown.Item>
@@ -68,4 +65,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default  AdminHeader;

@@ -1,26 +1,32 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/UserModel.js";
-import generateToken from "../utils/generateToken.js";
-
+import { generateToken } from "../utils/generateToken.js";
 //@desc Auth user/set token
 //route POST /api/users/auth
 //@access public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email});
 
-  if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
-
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-    });
-  } else {
+  if(user.isListed === false){
     res.status(401);
-    throw new Error("Invalid email or password");
+    throw new Error("User curerntly blocked from the admin side ");
+  }else{
+
+    if (user && (await user.matchPassword(password))) {
+      generateToken(res, user._id);
+  
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      });
+    } else {
+      res.status(401);
+      throw new Error("Invalid email or password");
+    }
   }
+
 });
 
 //@desc Register a new user
@@ -29,7 +35,7 @@ const authUser = asyncHandler(async (req, res) => {
 const resgisterUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  const userExist = await User.findOne({ email });
+  const userExist = await User.findOne({ email  });
   if (userExist) {
     res.status(400);
     throw new Error("User already exists");
@@ -54,11 +60,41 @@ const resgisterUser = asyncHandler(async (req, res) => {
   }
 });
 
+
+//register from admin
+const resgisterUserFromAdmin = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
+
+  const userExist = await User.findOne({ email  });
+  if (userExist) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+  });
+
+  if (user) {
+   
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+});
+
 //@desc Logout user
 //route POST /api/users/Logout
 //@access public
 const logoutUser = asyncHandler(async (req, res) => {
-  res.cookie("jwt", "", {
+  res.cookie("userJwt", "", {
     httpOnly: true,
     expires: new Date(0),
   });
@@ -110,10 +146,22 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserDetails = asyncHandler(async (req, res) => {
+  try {
+    const userDetails = await User.find({});
+    console.log("userdetails from the server", userDetails);
+    res.json({ userDetails });
+  } catch (err) {
+    console.log("error occured while fetching the userDetails");
+  }
+});
+
 export {
   authUser,
   resgisterUser,
   logoutUser,
   getUserProfile,
   updateUserProfile,
+  getUserDetails,
+  resgisterUserFromAdmin
 };

@@ -1,5 +1,6 @@
 import { apiSlice } from "./apiSlice";
 const USERS_URL = "/api/users";
+const ADMIN_URL ="/api/admin";
 console.log("UUUU", USERS_URL);
 
 export const userApiSlice = apiSlice.injectEndpoints({
@@ -31,6 +32,27 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    adminLogin: builder.mutation({
+      query: (data) => ({
+        url: `${ADMIN_URL}/login`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    adminLogout: builder.mutation({
+      query: (data) => ({
+        url: `${ADMIN_URL}/logout`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resgisterUserFromAdmin: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/resgisterUserFromAdmin`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -39,4 +61,7 @@ export const {
   useLogoutMutation,
   useRegisterMutation,
   useUpdateUserMutation,
+  useAdminLoginMutation,
+  useAdminLogoutMutation,
+  useResgisterUserFromAdminMutation
 } = userApiSlice;

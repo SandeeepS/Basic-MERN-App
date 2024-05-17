@@ -9,13 +9,14 @@ import Card from "react-bootstrap/Card";
 import mastang from "../assets/mastang-2.webp";
 import "../screens/profileScreen.css";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 const ProfileScreen = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.userAuth);
 
   const [, { isLoading }] = useUpdateUserMutation();
 
@@ -30,6 +31,8 @@ const ProfileScreen = () => {
   };
 
   return (
+    <>
+    <Header/>
     <FormContainer>
       <h1>My Profile</h1>
 
@@ -65,6 +68,7 @@ const ProfileScreen = () => {
         {isLoading && <Loader />}
       </Form>
     </FormContainer>
+    </>
   );
 };
 

@@ -16,6 +16,16 @@ const userSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    isListed: {
+      type: Boolean,
+      require: true,
+      default: true,
+    },
+    deleted: {
+      type: Boolean,
+      require: true,
+      default: false,
+    },
   },
   {
     timestamps: true,
