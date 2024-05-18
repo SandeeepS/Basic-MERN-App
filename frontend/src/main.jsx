@@ -28,6 +28,8 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
 
+      
+      {/** admin route  */}
       <Route path="/admin" element={<AdminLogin/>}/>
 
       {/* Pirvate Route */}
