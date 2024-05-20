@@ -26,6 +26,7 @@ const LoginScreen = () => {
     }
   }, [navigate, userInfo]);
 
+  //submit handlerfd
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
