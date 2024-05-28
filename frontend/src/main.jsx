@@ -28,17 +28,18 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
 
-      
       {/** admin route  */}
-      <Route path="/admin" element={<AdminLogin/>}/>
+      <Route path="/admin" element={<AdminLogin />} />
 
       {/* Pirvate Route */}
       <Route path="" element={<PrivateRoute />}>
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/updateProfile" element={<UpdateProfile />} />
-        <Route path="/adminProfile" element={<AdminProfile/>} />
-        <Route path="/addUser" element={<AddUserAdmin />} /> 
+
+        {/* admin private route */}
+        <Route path="/adminProfile" element={<AdminProfile />} />
+        <Route path="/addUser" element={<AddUserAdmin />} />
       </Route>
     </Route>
   )
